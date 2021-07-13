@@ -1,7 +1,4 @@
-// eslint-disable-next-line no-unused-vars
-const { accounts, defaultSender } = require('@openzeppelin/test-environment');
-const { BN, ether, time, expectEvent, expectRevert } = require('@openzeppelin/test-helpers');
-const { default: BigNumber } = require('bignumber.js');
+const { BN, ether } = require('@openzeppelin/test-helpers');
 const { assert } = require('chai');
 
 const AliumFactory = artifacts.require('AliumFactory');
@@ -14,7 +11,6 @@ const MockUSDY = artifacts.require('MockUSDY');
 const MockUSDZ = artifacts.require('MockUSDZ');
 const MockWBTC = artifacts.require('MockWBTC');
 const AliumVamp = artifacts.require('AliumVamp');
-const Token = artifacts.require('TokenMock');
 const TokenWETH = artifacts.require('MockWETH');
 
 MockUSDX.numberFormat = 'String';
@@ -23,14 +19,12 @@ let uniswapFactory;
 let uniswapFactory2;
 let uniswapPair;
 let uniswapPairUSDX_WETH;
-let uPair;
 let usdx;
 let usdy;
 let usdz;
 let weth;
 let wbtc;
 let vamp;
-let mooniPair;
 let aliumPair;
 
 const money = {
@@ -59,7 +53,7 @@ v WBTC   (8)
 */
 
 contract('AliumVamp test', function (accounts) {
-    const [TestOwner, alice, bob, clarc, dave, eve, george, henry, ivan] = accounts;
+    const [TestOwner, alice, bob, dave, henry, ivan] = accounts;
 
     beforeEach(async function () {
         uniswapFactory = await UniswapV2Factory.new(TestOwner);
@@ -156,14 +150,14 @@ contract('AliumVamp test', function (accounts) {
         let tx = await vamp.addAllowedToken(weth.address, {from: henry});
         console.log('Adding allowed token gas used: %d', tx.receipt.gasUsed);
         await vamp.addAllowedToken(usdz.address, {from: henry});
-        b = await vamp.getAllowedTokensLength({from: henry});
+        let b = await vamp.getAllowedTokensLength({from: henry});
         console.log('Now we have %d allowed tokens', b);
         assert.equal(b, 2);
       });
       it('should successfully list tokens under admin', async function () {
         await vamp.addAllowedToken(weth.address, {from: henry});
         await vamp.addAllowedToken(usdz.address, {from: henry});
-        b = await vamp.getAllowedTokensLength({from: henry});
+        let b = await vamp.getAllowedTokensLength({from: henry});
         assert.equal(b, 2);
         b = await vamp.allowedTokens(0, {from: henry});
         assert.equal(b, weth.address);
@@ -174,9 +168,9 @@ contract('AliumVamp test', function (accounts) {
         let b = await vamp.lpTokensInfoLength();
         console.log(b);
         assert.equal(b, 3);
-	b = await vamp.lpTokensInfo(1);
+	    b = await vamp.lpTokensInfo(1);
         assert.equal(b.lpToken, uniswapPair.address);
-	b = await vamp.lpTokensInfo(0);
+	    b = await vamp.lpTokensInfo(0);
         assert.equal(b.lpToken, aliumPair.address);
       });
       it('should succeed to list tokens under non-admin wallet', async function () {
