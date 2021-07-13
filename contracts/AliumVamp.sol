@@ -10,6 +10,7 @@ import "./interfaces/IMooniswap.sol";
 import "./libraries/TransferHelper.sol";
 
 /**
+ * @title AliumVamp liquidity migrator.
  * @dev Contract to convert liquidity from other market makers
  * (Uniswap/Mooniswap) to our pairs.
  */
