@@ -10,13 +10,15 @@ import "./interfaces/IMooniswap.sol";
 import "./libraries/TransferHelper.sol";
 
 /**
- * @dev Contract to convert liquidity from other market makers (Uniswap/Mooniswap) to our pairs.
+ * @dev Contract to convert liquidity from other market makers
+ * (Uniswap/Mooniswap) to our pairs.
  */
 contract AliumVamp is Ownable {
     using SafeERC20 for IERC20;
     using SafeMath for uint256;
 
-    uint constant LIQUIDITY_DEADLINE = 10 * 20; // 10 minutes in blocks, ~3 sec per block
+    // 10 minutes in blocks, ~3 sec per block
+    uint256 public constant LIQUIDITY_DEADLINE = 10 * 20;
 
     struct LPTokenInfo {
         address lpToken;
@@ -34,7 +36,12 @@ contract AliumVamp is Ownable {
     event AllowedTokenAdded(address indexed token);
     event AllowedTokenRemoved(address indexed token);
     event LPTokenAdded(address indexed token, uint256 tokenType);
-    event LPTokenChanged(address indexed oldToken, address indexed newToken, uint256 oldType, uint256 newType);
+    event LPTokenChanged(
+        address indexed oldToken,
+        address indexed newToken,
+        uint256 oldType,
+        uint256 newType
+    );
     event RouterChanged(address indexed oldRouter, address indexed newRouter);
 
     constructor(
@@ -42,9 +49,18 @@ contract AliumVamp is Ownable {
         uint8[] memory _types,
         address _ourrouter
     ) public {
-        require(_lptokens.length > 0, "AliumVamp: _lptokens length should not be 0!");
-        require(_lptokens.length == _types.length, "AliumVamp: array lengths should be equal");
-        require(_ourrouter != address(0), "AliumVamp: _ourrouter address should not be 0");
+        require(
+            _lptokens.length > 0,
+            "AliumVamp: _lptokens length should not be 0!"
+        );
+        require(
+            _lptokens.length == _types.length,
+            "AliumVamp: array lengths should be equal"
+        );
+        require(
+            _ourrouter != address(0),
+            "AliumVamp: _ourrouter address should not be 0"
+        );
 
         for (uint256 i = 0; i < _lptokens.length; i++) {
             lpTokensInfo.push(
@@ -73,7 +89,10 @@ contract AliumVamp is Ownable {
         view
         returns (address, address)
     {
-        require(_pid < lpTokensInfo.length, "AliumVamp: _pid should be less than lpTokensInfo");
+        require(
+            _pid < lpTokensInfo.length,
+            "AliumVamp: _pid should be less than lpTokensInfo"
+        );
         if (lpTokensInfo[_pid].tokenType == 0) {
             // this is uniswap
             IUniswapV2Pair lpToken = IUniswapV2Pair(lpTokensInfo[_pid].lpToken);
@@ -87,14 +106,17 @@ contract AliumVamp is Ownable {
     }
 
     /**
-     * @dev Adds new entry to the list of allowed tokens (if it is not exist yet)
+     * @dev Adds new entry to the list of allowed tokens (if not exist)
      */
     function addAllowedToken(address _token) external onlyOwner {
-        require(_token != address(0),"AliumVamp: _token address should not be 0");
+        require(
+            _token != address(0),
+            "AliumVamp: _token address should not be 0"
+        );
 
         for (uint256 i = 0; i < allowedTokens.length; i++) {
             if (address(allowedTokens[i]) == _token) {
-		        require(false, "AliumVamp: Token already exists!");
+                require(false, "AliumVamp: Token already exists!");
             }
         }
         emit AllowedTokenAdded(_token);
@@ -104,11 +126,11 @@ contract AliumVamp is Ownable {
     /**
      * @dev Remove entry from the list of allowed tokens
      */
-    function removeAllowedToken(uint _idx) external onlyOwner {
+    function removeAllowedToken(uint256 _idx) external onlyOwner {
         require(_idx < allowedTokens.length, "AliumVamp: _idx out of range");
 
         emit AllowedTokenRemoved(address(allowedTokens[_idx]));
-	delete allowedTokens[_idx];
+        delete allowedTokens[_idx];
     }
 
     /**
@@ -119,12 +141,15 @@ contract AliumVamp is Ownable {
         onlyOwner
         returns (uint256)
     {
-        require(_token != address(0),"AliumVamp: _token address should not be 0!");
-        require(_tokenType < 2,"AliumVamp: wrong token type!");
+        require(
+            _token != address(0),
+            "AliumVamp: _token address should not be 0!"
+        );
+        require(_tokenType < 2, "AliumVamp: wrong token type!");
 
         for (uint256 i = 0; i < lpTokensInfo.length; i++) {
             if (lpTokensInfo[i].lpToken == _token) {
-		        require(false, "AliumVamp: Token already exists!");
+                require(false, "AliumVamp: Token already exists!");
             }
         }
         lpTokensInfo.push(
@@ -137,12 +162,24 @@ contract AliumVamp is Ownable {
     /**
      * @dev Remove entry from the list of convertible LP-tokens
      */
-    function changeLPToken(uint _idx, address _token, uint16 _tokenType) external onlyOwner {
+    function changeLPToken(
+        uint256 _idx,
+        address _token,
+        uint16 _tokenType
+    ) external onlyOwner {
         require(_idx < lpTokensInfo.length, "AliumVamp: _idx out of range");
-        require(_token != address(0), "AliumVamp: _token address should not be 0!");
+        require(
+            _token != address(0),
+            "AliumVamp: _token address should not be 0!"
+        );
         require(_tokenType < 2, "AliumVamp: wrong tokenType");
 
-        emit LPTokenChanged(lpTokensInfo[_idx].lpToken, _token, lpTokensInfo[_idx].tokenType, _tokenType);
+        emit LPTokenChanged(
+            lpTokensInfo[_idx].lpToken,
+            _token,
+            lpTokensInfo[_idx].tokenType,
+            _tokenType
+        );
         lpTokensInfo[_idx].lpToken = _token;
         lpTokensInfo[_idx].tokenType = _tokenType;
     }
@@ -157,9 +194,9 @@ contract AliumVamp is Ownable {
         ourRouter = IUniswapV2Router01(_newRouter);
     }
 
-    // Deposit LP tokens to us
     /**
-     * @dev Main function that converts third-party liquidity (represented by LP-tokens) to our own LP-tokens
+     * @dev Main function that converts third-party liquidity
+     * (represented by LP-tokens) to our own LP-tokens
      */
     function deposit(uint256 _pid, uint256 _amount) external {
         require(_pid < lpTokensInfo.length, "AliumVamp: _pid out of range!");
@@ -175,7 +212,8 @@ contract AliumVamp is Ownable {
     }
 
     /**
-     * @dev Actual function that converts third-party Uniswap liquidity (represented by LP-tokens) to our own LP-tokens
+     * @dev Actual function that converts third-party Uniswap liquidity
+     * (represented by LP-tokens) to our own LP-tokens
      */
     function _depositUniswap(uint256 _pid, uint256 _amount) internal {
         IUniswapV2Pair lpToken = IUniswapV2Pair(lpTokensInfo[_pid].lpToken);
@@ -185,7 +223,12 @@ contract AliumVamp is Ownable {
         IERC20 token1 = IERC20(lpToken.token1());
 
         // transfer to us
-	    TransferHelper.safeTransferFrom(address(lpToken), address(msg.sender), address(lpToken), _amount);
+        TransferHelper.safeTransferFrom(
+            address(lpToken),
+            address(msg.sender),
+            address(lpToken),
+            _amount
+        );
 
         // get liquidity
         (uint256 amountIn0, uint256 amountIn1) = lpToken.burn(address(this));
@@ -209,20 +252,20 @@ contract AliumVamp is Ownable {
         TransferHelper.safeApprove(_token0, address(ourRouter), _amount0);
         TransferHelper.safeApprove(_token1, address(ourRouter), _amount1);
 
-        (uint256 amountOut0, uint256 amountOut1, ) =
-            ourRouter.addLiquidity(
-                address(_token0),
-                address(_token1),
-                _amount0,
-                _amount1,
-                0,
-                0,
-                _receiver,
-                block.timestamp + LIQUIDITY_DEADLINE
-            );
+        (uint256 amountOut0, uint256 amountOut1, ) = ourRouter.addLiquidity(
+            address(_token0),
+            address(_token1),
+            _amount0,
+            _amount1,
+            0,
+            0,
+            _receiver,
+            block.timestamp + LIQUIDITY_DEADLINE
+        );
 
         // return the change
-        if (amountOut0 < _amount0) { // consumed less tokens than given
+        if (amountOut0 < _amount0) {
+            // consumed less tokens than given
             TransferHelper.safeTransfer(
                 _token0,
                 address(msg.sender),
@@ -230,7 +273,8 @@ contract AliumVamp is Ownable {
             );
         }
 
-        if (amountOut1 < _amount1) { // consumed less tokens than given
+        if (amountOut1 < _amount1) {
+            // consumed less tokens than given
             TransferHelper.safeTransfer(
                 _token1,
                 address(msg.sender),
@@ -242,7 +286,8 @@ contract AliumVamp is Ownable {
     }
 
     /**
-     * @dev Actual function that converts third-party Mooniswap liquidity (represented by LP-tokens) to our own LP-tokens
+     * @dev Actual function that converts third-party Mooniswap liquidity
+     * (represented by LP-tokens) to our own LP-tokens
      */
     function _depositMooniswap(uint256 _pid, uint256 _amount) internal {
         IMooniswap lpToken = IMooniswap(lpTokensInfo[_pid].lpToken);
@@ -253,7 +298,12 @@ contract AliumVamp is Ownable {
         IERC20 token1 = IERC20(t[1]);
 
         // transfer to us
-	TransferHelper.safeTransferFrom(address(lpToken), address(msg.sender), address(this), _amount);
+        TransferHelper.safeTransferFrom(
+            address(lpToken),
+            address(msg.sender),
+            address(this),
+            _amount
+        );
 
         uint256 amountBefore0 = token0.balanceOf(address(this));
         uint256 amountBefore1 = token1.balanceOf(address(this));
@@ -276,31 +326,38 @@ contract AliumVamp is Ownable {
     }
 
     /**
-     * @dev Function check for LP token pair availability. Return _pid or 0 if none exists
+     * @dev Function check for LP token pair availability.
+     * Returns _pid or 0 if none exists.
      */
     function isPairAvailable(address _token0, address _token1)
         external
         view
         returns (uint16)
     {
-        require(_token0 != address(0), "AliumVamp: _token0 address should not be 0!");
-        require(_token1 != address(0), "AliumVamp: _token1 address should not be 0!");
+        require(
+            _token0 != address(0),
+            "AliumVamp: _token0 address should not be 0!"
+        );
+        require(
+            _token1 != address(0),
+            "AliumVamp: _token1 address should not be 0!"
+        );
 
         for (uint16 i = 0; i < lpTokensInfo.length; i++) {
             address t0 = address(0);
             address t1 = address(0);
 
             if (lpTokensInfo[i].tokenType == 0) {
-              IUniswapV2Pair lpt = IUniswapV2Pair(lpTokensInfo[i].lpToken);
-              t0 = lpt.token0();
-              t1 = lpt.token1();
+                IUniswapV2Pair lpt = IUniswapV2Pair(lpTokensInfo[i].lpToken);
+                t0 = lpt.token0();
+                t1 = lpt.token1();
             } else if (lpTokensInfo[i].tokenType == 1) {
-              IMooniswap lpToken = IMooniswap(lpTokensInfo[i].lpToken);
+                IMooniswap lpToken = IMooniswap(lpTokensInfo[i].lpToken);
 
-              IERC20[] memory t = lpToken.getTokens();
+                IERC20[] memory t = lpToken.getTokens();
 
-              t0 = address(t[0]);
-              t1 = address(t[1]);
+                t0 = address(t[0]);
+                t1 = address(t[1]);
             } else {
                 return 0;
             }
@@ -323,7 +380,10 @@ contract AliumVamp is Ownable {
         address beneficiary,
         uint256 amount
     ) external onlyOwner returns (bool success) {
-        require(tokenAddress != address(0), "AliumVamp: Token address cannot be 0");
+        require(
+            tokenAddress != address(0),
+            "AliumVamp: Token address cannot be 0"
+        );
 
         return IERC20(tokenAddress).transfer(beneficiary, amount);
     }
