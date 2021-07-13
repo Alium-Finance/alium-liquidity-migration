@@ -1,14 +1,14 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.6.2;
 
-import "./interfaces/IAliumPair.sol";
-import "./interfaces/IAliumCallee.sol";
-import "./interfaces/IAliumFactory.sol";
+import "../interfaces/IAliumPair.sol";
+import "../interfaces/IAliumCallee.sol";
+import "../interfaces/IAliumFactory.sol";
 import "./AliumERC20.sol";
 import "@openzeppelin/contracts/math/SafeMath.sol";
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
-import "./uniswapv2/libraries/Math.sol";
-import "./uniswapv2/libraries/UQ112x112.sol";
+import "../uniswapv2/libraries/Math.sol";
+import "../uniswapv2/libraries/UQ112x112.sol";
 
 contract AliumPair is IAliumPair, AliumERC20 {
     using SafeMath  for uint;

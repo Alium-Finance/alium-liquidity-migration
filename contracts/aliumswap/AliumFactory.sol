@@ -3,7 +3,7 @@ pragma solidity ^0.6.2;
 
 import "@openzeppelin/contracts/math/SafeMath.sol";
 import "./AliumPair.sol";
-import "./interfaces/IAliumFactory.sol";
+import "../interfaces/IAliumFactory.sol";
 
 contract AliumFactory is IAliumFactory {
     bytes32 public constant INIT_CODE_PAIR_HASH = keccak256(abi.encodePacked(type(AliumPair).creationCode));

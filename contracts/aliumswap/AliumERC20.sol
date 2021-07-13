@@ -1,9 +1,8 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.6.2;
 
-import "./interfaces/IAliumERC20.sol";
+import "../interfaces/IAliumERC20.sol";
 import "@openzeppelin/contracts/math/SafeMath.sol";
-//import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 
 contract AliumERC20 is IAliumERC20 {
     using SafeMath for uint;
