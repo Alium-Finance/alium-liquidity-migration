@@ -8,7 +8,7 @@ import "@openzeppelin/contracts/math/SafeMath.sol";
 import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
 import "@openzeppelin/contracts/token/ERC20/SafeERC20.sol";
 
-contract TokenMock is ERC20, Ownable {
+contract ERC20Mock is ERC20, Ownable {
     constructor(
         string memory name,
         string memory symbol,
