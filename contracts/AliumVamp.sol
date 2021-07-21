@@ -68,6 +68,7 @@ contract AliumVamp is Ownable {
                 LPTokenInfo({lpToken: _lptokens[i], tokenType: _types[i]})
             );
         }
+
         ourRouter = IUniswapV2Router01(_ourrouter);
     }
 
@@ -78,6 +79,9 @@ contract AliumVamp is Ownable {
         return allowedTokens.length;
     }
 
+    /**
+     * @dev Returns length of resolved LP token collection
+     */
     function lpTokensInfoLength() external view returns (uint256) {
         return lpTokensInfo.length;
     }
@@ -94,6 +98,7 @@ contract AliumVamp is Ownable {
             _pid < lpTokensInfo.length,
             "AliumVamp: _pid should be less than lpTokensInfo"
         );
+
         if (lpTokensInfo[_pid].tokenType == 0) {
             // this is uniswap
             IUniswapV2Pair lpToken = IUniswapV2Pair(lpTokensInfo[_pid].lpToken);
@@ -370,6 +375,7 @@ contract AliumVamp is Ownable {
                 return 1;
             }
         }
+
         return 0;
     }
 
