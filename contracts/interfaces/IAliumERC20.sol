@@ -1,13 +1,13 @@
 // SPDX-License-Identifier: MIT
-pragma solidity ^0.6.2;
+pragma solidity >=0.6.2;
 
 interface IAliumERC20 {
-    event Approval(
-        address indexed owner,
-        address indexed spender,
-        uint256 value
-    );
-    event Transfer(address indexed from, address indexed to, uint256 value);
+//    event Approval(
+//        address indexed owner,
+//        address indexed spender,
+//        uint256 value
+//    );
+//    event Transfer(address indexed from, address indexed to, uint256 value);
 
     function name() external pure returns (string memory);
 

@@ -1,13 +1,13 @@
 // SPDX-License-Identifier: MIT
-pragma solidity ^0.6.2;
+pragma solidity >=0.6.2;
 
 interface IAliumFactory {
-    event PairCreated(
-        address indexed token0,
-        address indexed token1,
-        address pair,
-        uint256
-    );
+//    event PairCreated(
+//        address indexed token0,
+//        address indexed token1,
+//        address pair,
+//        uint256
+//    );
 
     function feeTo() external view returns (address);
 

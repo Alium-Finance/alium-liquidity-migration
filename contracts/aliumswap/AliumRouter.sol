@@ -1,10 +1,10 @@
 // SPDX-License-Identifier: MIT
-pragma solidity ^0.6.2;
+pragma solidity >=0.6.2;
 
 import "@openzeppelin/contracts/math/SafeMath.sol";
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import "../interfaces/IAliumFactory.sol";
-import "../interfaces/IAliumRouter.sol";
+import { IAliumRouter02 } from "../interfaces/IAliumRouter.sol";
 import "../interfaces/IAliumERC20.sol";
 import "../interfaces/IWETH.sol";
 import "../libraries/AliumLibrary.sol";
