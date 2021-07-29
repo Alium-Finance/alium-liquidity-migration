@@ -6,7 +6,6 @@ import "@openzeppelin/contracts/access/Ownable.sol";
 import "@openzeppelin/contracts/token/ERC20/SafeERC20.sol";
 import "./interfaces/IMooniswap.sol";
 import "./libraries/TransferHelper.sol";
-//import { IUniswapV2Pair } from "./uniswapv2/interfaces/IUniswapV2Pair.sol";
 import { IUniswapV3Pool, IUniswapV3PoolActions } from '@uniswap/v3-core/contracts/interfaces/IUniswapV3Pool.sol';
 import { INonfungiblePositionManager } from '@uniswap/v3-periphery/contracts/interfaces/INonfungiblePositionManager.sol';
 
@@ -14,8 +13,7 @@ import { IAliumRouter01 } from "./interfaces/IAliumRouter.sol";
 
 /**
  * @title AliumVamp liquidity migrator.
- * @dev Contract to convert liquidity from uniswapV3 to aliumV1.1 router
- * (Uniswap/Mooniswap) to our pairs.
+ * @dev Contract to convert liquidity from uniswapV3 to aliumV1.1 router.
  */
 contract AliumVampV2 is Ownable {
     using SafeERC20 for IERC20;
