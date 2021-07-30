@@ -46,13 +46,13 @@ contract AliumVampV2 is Ownable {
      * @dev Main function that converts third-party liquidity
      * (represented by LP-tokens) to our own LP-tokens
      */
-    function deposit(address _uniV3PositionManager, uint256 _tokenId) external {
+    function deposit(address _factoryV3, address _uniV3PositionManager, uint256 _tokenId) external {
         (
             ,
             ,
             address token0,
             address token1,
-            ,
+            uint24 fee,
             ,
             ,
             uint128 liquidity,
@@ -61,6 +61,10 @@ contract AliumVampV2 is Ownable {
             ,
 
         ) = INonfungiblePositionManager(_uniV3PositionManager).positions(_tokenId);
+
+        address pool = IUniswapV3Factory(_factoryV3).getPool(token0, token1, fee);
+        IERC721(pool).safeTransferFrom(msg.sender, address(this), _tokenId);
+        IERC721(pool).safeApprove(address(this), _uniV3PositionManager, _tokenId);
 
         INonfungiblePositionManager.CollectParams memory _collectParams;
         _collectParams.tokenId = _tokenId;
@@ -104,7 +108,7 @@ contract AliumVampV2 is Ownable {
         require(_newRouter != address(0), "New Router address is wrong");
 
         emit RouterChanged(address(ourRouter), _newRouter);
-        ourRouter = IUniswapV2Router01(_newRouter);
+        ourRouter = IAliumRouter01(_newRouter);
     }
 
     function _addLiquidity(
