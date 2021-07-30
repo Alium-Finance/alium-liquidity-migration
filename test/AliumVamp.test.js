@@ -26,17 +26,6 @@ let vamp;
 let aliumPair;
 let aliumRouter, aliumFactory;
 
-const money = {
-    ether,
-    eth: ether,
-    zero: ether('0'),
-    weth: ether,
-    dai: ether,
-    usdx: ether,
-    usdy: (value) => ether(value).div(new BN (1e10)),
-    usdc: (value) => ether(value).div(new BN (1e12)),
-};
-
 /**
  *Token  Decimals
 V ETH    (18)
@@ -128,9 +117,9 @@ contract('AliumVamp test',  (accounts) => {
         await weth.transfer(alice, '1000000000000');
 
         aliumFactory = await AliumFactory.new(ivan);
+        console.log(`INIT CODE HASH: ${await aliumFactory.INIT_CODE_PAIR_HASH()}`)
 
         aliumRouter = await AliumRouter.new(aliumFactory.address, weth.address);
-        await aliumRouter.deployed()
 
         await weth.approve(aliumRouter.address, new BN(MaxUint256.toString()), {from: alice});
         await usdx.approve(aliumRouter.address, new BN(MaxUint256.toString()), {from: alice});
