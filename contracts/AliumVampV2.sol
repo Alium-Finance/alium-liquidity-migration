@@ -13,7 +13,7 @@ import { IUniswapV2Router01 } from "@uniswap/v2-periphery/contracts/interfaces/I
 
 import { IUniswapV3Factory } from '@uniswap/v3-core/contracts/interfaces/IUniswapV3Factory.sol';
 import { IUniswapV3Pool, IUniswapV3PoolActions } from '@uniswap/v3-core/contracts/interfaces/IUniswapV3Pool.sol';
-import { INonfungiblePositionManager } from '@uniswap/v3-periphery/contracts/interfaces/INonfungiblePositionManager.sol';
+import { INonfungiblePositionManager, IPeripheryImmutableState } from '@uniswap/v3-periphery/contracts/interfaces/INonfungiblePositionManager.sol';
 
 import { IAliumRouter01 } from "./interfaces/IAliumRouter.sol";
 
@@ -62,9 +62,10 @@ contract AliumVampV2 is Ownable {
 
         ) = INonfungiblePositionManager(_uniV3PositionManager).positions(_tokenId);
 
-        address pool = IUniswapV3Factory(_factoryV3).getPool(token0, token1, fee);
+        address uniFactoryV3 = IPeripheryImmutableState(_uniV3PositionManager).factory();
+        address pool = IUniswapV3Factory(uniFactoryV3).getPool(token0, token1, fee);
         IERC721(pool).safeTransferFrom(msg.sender, address(this), _tokenId);
-        IERC721(pool).safeApprove(address(this), _uniV3PositionManager, _tokenId);
+        IERC721(pool).approve(_uniV3PositionManager, _tokenId);
 
         INonfungiblePositionManager.CollectParams memory _collectParams;
         _collectParams.tokenId = _tokenId;
