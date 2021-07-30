@@ -46,7 +46,7 @@ contract AliumVampV2 is Ownable {
      * @dev Main function that converts third-party liquidity
      * (represented by LP-tokens) to our own LP-tokens
      */
-    function deposit(address _factoryV3, address _uniV3PositionManager, uint256 _tokenId) external {
+    function deposit(address _uniV3PositionManager, uint256 _tokenId) external {
         (
             ,
             ,
@@ -108,7 +108,7 @@ contract AliumVampV2 is Ownable {
         require(_newRouter != address(0), "New Router address is wrong");
 
         emit RouterChanged(address(ourRouter), _newRouter);
-        ourRouter = IAliumRouter01(_newRouter);
+        ourRouter = IUniswapV2Router01(_newRouter);
     }
 
     function _addLiquidity(
