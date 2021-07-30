@@ -109,7 +109,7 @@ contract AliumVampV2 is Ownable {
         require(_newRouter != address(0), "New Router address is wrong");
 
         emit RouterChanged(address(ourRouter), _newRouter);
-        ourRouter = IUniswapV2Router01(_newRouter);
+        ourRouter = IAliumRouter01(_newRouter);
     }
 
     function _addLiquidity(
