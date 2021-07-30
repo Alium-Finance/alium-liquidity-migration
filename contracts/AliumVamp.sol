@@ -1,13 +1,15 @@
 // SPDX-License-Identifier: MIT
 pragma solidity >=0.6.2;
 
-import "@openzeppelin/contracts/access/Ownable.sol";
-import "./uniswapv2/interfaces/IUniswapV2Pair.sol";
-import "./uniswapv2/interfaces/IUniswapV2Factory.sol";
-import "./uniswapv2/interfaces/IUniswapV2Router02.sol";
-import "@openzeppelin/contracts/token/ERC20/SafeERC20.sol";
-import "./interfaces/IMooniswap.sol";
-import "./libraries/TransferHelper.sol";
+import { SafeMath } from "@openzeppelin/contracts/math/SafeMath.sol";
+import { Ownable } from "@openzeppelin/contracts/access/Ownable.sol";
+import { IERC20 } from "@openzeppelin/contracts/token/ERC20/IERC20.sol";
+import { IUniswapV2Pair } from "./uniswapv2/interfaces/IUniswapV2Pair.sol";
+import { IUniswapV2Factory } from "@uniswap/v2-core/contracts/interfaces/IUniswapV2Factory.sol";
+import { IUniswapV2Router01 } from "@uniswap/v2-periphery/contracts/interfaces/IUniswapV2Router01.sol";
+import { SafeERC20 } from  "@openzeppelin/contracts/token/ERC20/SafeERC20.sol";
+import { IMooniswap } from "./interfaces/IMooniswap.sol";
+import { TransferHelper } from "./libraries/TransferHelper.sol";
 
 /**
  * @title AliumVamp liquidity migrator.

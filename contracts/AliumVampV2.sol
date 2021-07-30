@@ -2,11 +2,16 @@
 pragma solidity >=0.6.2;
 pragma abicoder v2;
 
-import "@openzeppelin/contracts/access/Ownable.sol";
-import "@openzeppelin/contracts/token/ERC20/SafeERC20.sol";
-import "./interfaces/IMooniswap.sol";
-import "./libraries/TransferHelper.sol";
-//import { IUniswapV2Pair } from "./uniswapv2/interfaces/IUniswapV2Pair.sol";
+import { Ownable } from "@openzeppelin/contracts/access/Ownable.sol";
+import { SafeERC20 } from "@openzeppelin/contracts/token/ERC20/SafeERC20.sol";
+import { IERC20 } from "@openzeppelin/contracts/token/ERC20/IERC20.sol";
+import { IERC721 } from "@openzeppelin/contracts/token/ERC721/IERC721.sol";
+import { SafeMath } from "@openzeppelin/contracts/math/SafeMath.sol";
+import { TransferHelper } from "./libraries/TransferHelper.sol";
+
+import { IUniswapV2Router01 } from "@uniswap/v2-periphery/contracts/interfaces/IUniswapV2Router01.sol";
+
+import { IUniswapV3Factory } from '@uniswap/v3-core/contracts/interfaces/IUniswapV3Factory.sol';
 import { IUniswapV3Pool, IUniswapV3PoolActions } from '@uniswap/v3-core/contracts/interfaces/IUniswapV3Pool.sol';
 import { INonfungiblePositionManager } from '@uniswap/v3-periphery/contracts/interfaces/INonfungiblePositionManager.sol';
 
