@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: MIT
-pragma solidity >=0.6.2;
+pragma solidity >=0.7.6;
 
 import { SafeMath } from "@openzeppelin/contracts/math/SafeMath.sol";
 import { Ownable } from "@openzeppelin/contracts/access/Ownable.sol";
@@ -51,7 +51,7 @@ contract AliumVamp is Ownable {
         address[] memory _lptokens,
         uint8[] memory _types,
         address _ourrouter
-    ) public {
+    ) {
         require(
             _lptokens.length > 0,
             "AliumVamp: _lptokens length should not be 0!"

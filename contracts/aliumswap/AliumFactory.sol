@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: MIT
-pragma solidity >=0.6.2;
+pragma solidity >=0.7.6;
 
 import "@openzeppelin/contracts/math/SafeMath.sol";
 import "./AliumPair.sol";
@@ -16,7 +16,7 @@ contract AliumFactory is IAliumFactory {
 
     event PairCreated(address indexed token0, address indexed token1, address pair, uint);
 
-    constructor(address _feeToSetter) public {
+    constructor(address _feeToSetter) {
         feeToSetter = _feeToSetter;
     }
 

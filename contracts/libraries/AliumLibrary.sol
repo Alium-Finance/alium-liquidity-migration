@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: UNLICENSED
-pragma solidity >=0.6.2;
+pragma solidity >=0.7.6;
 
 import "@openzeppelin/contracts/math/SafeMath.sol";
 import "../interfaces/IAliumPair.sol";
@@ -21,7 +21,7 @@ library AliumLibrary {
                 hex'ff',
                 factory,
                 keccak256(abi.encodePacked(token0, token1)),
-                hex'7aa11cd9f510f04e8ca0e046eb7a4aeeaa46a191382d24a0f6f7631fe5e14422' // init code hash
+                hex'658bc7fdfd25f4d3b92b6561691655af9cf050d10994dcbd0910aa2d964abdc4' // init code hash
             ))));
     }
 

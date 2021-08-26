@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: MIT
-pragma solidity >=0.6.2;
+pragma solidity >=0.7.6;
 
 import "../interfaces/IAliumERC20.sol";
 import "@openzeppelin/contracts/math/SafeMath.sol";
@@ -22,7 +22,7 @@ contract AliumERC20 is IAliumERC20 {
     event Approval(address indexed owner, address indexed spender, uint value);
     event Transfer(address indexed from, address indexed to, uint value);
 
-    constructor() public {
+    constructor() {
         uint chainId;
         assembly {
             chainId := chainid()

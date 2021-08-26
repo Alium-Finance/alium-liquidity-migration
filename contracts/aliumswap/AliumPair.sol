@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: MIT
-pragma solidity >=0.6.2;
+pragma solidity >=0.7.6;
 
 import "../interfaces/IAliumPair.sol";
 import "../interfaces/IAliumCallee.sol";
@@ -7,8 +7,8 @@ import "../interfaces/IAliumFactory.sol";
 import "./AliumERC20.sol";
 import "@openzeppelin/contracts/math/SafeMath.sol";
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
-import "@uniswap/v2-core/contracts/libraries/Math.sol";
-import "@uniswap/v2-core/contracts/libraries/UQ112x112.sol";
+import "../libraries/Math.sol";
+import "../libraries/UQ112x112.sol";
 
 contract AliumPair is IAliumPair, AliumERC20 {
     using SafeMath  for uint;
@@ -60,7 +60,7 @@ contract AliumPair is IAliumPair, AliumERC20 {
     );
     event Sync(uint112 reserve0, uint112 reserve1);
 
-    constructor() public {
+    constructor() {
         factory = msg.sender;
     }
 

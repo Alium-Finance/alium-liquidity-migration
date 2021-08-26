@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: MIT
-pragma solidity >=0.6.2;
+pragma solidity >=0.7.6;
 
 interface IAliumPair {
 //    event Mint(address indexed sender, uint256 amount0, uint256 amount1);

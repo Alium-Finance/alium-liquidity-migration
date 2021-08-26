@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: MIT
-pragma solidity >=0.6.2;
+pragma solidity >=0.7.6;
 pragma abicoder v2;
 
 import { Ownable } from "@openzeppelin/contracts/access/Ownable.sol";
@@ -11,9 +11,21 @@ import { TransferHelper } from "./libraries/TransferHelper.sol";
 
 import { IUniswapV2Router01 } from "@uniswap/v2-periphery/contracts/interfaces/IUniswapV2Router01.sol";
 
+//import { IUniswapV3Factory } from './uniswapV3/core/interfaces/IUniswapV3Factory.sol';
+//import { IUniswapV3Pool, IUniswapV3PoolActions } from './uniswapV3/core/interfaces/IUniswapV3Pool.sol';
+//import {
+//    INonfungiblePositionManager,
+//    IPeripheryImmutableState
+//} from './uniswapV3/periphery/interfaces/INonfungiblePositionManager.sol';
 import { IUniswapV3Factory } from '@uniswap/v3-core/contracts/interfaces/IUniswapV3Factory.sol';
-import { IUniswapV3Pool, IUniswapV3PoolActions } from '@uniswap/v3-core/contracts/interfaces/IUniswapV3Pool.sol';
-import { INonfungiblePositionManager, IPeripheryImmutableState } from '@uniswap/v3-periphery/contracts/interfaces/INonfungiblePositionManager.sol';
+import {
+    IUniswapV3Pool,
+    IUniswapV3PoolActions
+} from '@uniswap/v3-core/contracts/interfaces/IUniswapV3Pool.sol';
+import {
+    INonfungiblePositionManager,
+    IPeripheryImmutableState
+} from '@uniswap/v3-periphery/contracts/interfaces/INonfungiblePositionManager.sol';
 
 import { IAliumRouter01 } from "./interfaces/IAliumRouter.sol";
 
@@ -22,7 +34,7 @@ import { IAliumRouter01 } from "./interfaces/IAliumRouter.sol";
  * @dev Contract to convert liquidity from uniswapV3 to aliumV1.1 router
  * (Uniswap/Mooniswap) to our pairs.
  */
-contract AliumVampV2 is Ownable {
+contract AliumVampUniV3 is Ownable {
     using SafeERC20 for IERC20;
     using SafeMath for uint256;
 
@@ -33,7 +45,7 @@ contract AliumVampV2 is Ownable {
 
     event RouterChanged(address indexed oldRouter, address indexed newRouter);
 
-    constructor(address _ourRouter) public {
+    constructor(address _ourRouter) {
         require(
             _ourRouter != address(0),
             "AliumVampV2: _ourRouter address should not be 0"
